@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine’s Surprise ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #ffc0cb, #ffb6c1);
+      font-family: 'Georgia', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .card {
+      background: #fffafc;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(255,0,0,0.3);
+      width: 90%;
+      max-width: 500px;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+    h1, h2, p {
+      color: #d6336c;
+      text-shadow: 1px 1px 3px pink;
+    }
+    button {
+      margin: 10px;
+      padding: 15px 25px;
+      font-size: 1.2em;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: #c9184a;
+    }
+    #typing {
+      font-size: 1.5em;
+      color: #ff1493;
+      margin-top: 20px;
+      min-height: 40px;
+    }
+    #popup {
+      display: none;
+    }
+    #letter {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: black;
+      text-align: left;
+      padding: 20px;
+      border: 2px dashed red;
+      border-radius: 10px;
+      background: #ffe6e6;
+      font-family: 'Courier New', cursive;
+    }
+    .petal {
+      position: fixed;
+      top: -50px;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+      animation: fall 5s linear forwards;
+      opacity: 0.8;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+    audio { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card" id="mainCard">
+    <!-- Step 1 -->
+    <div id="step1">
+      <h1>Hey! I want to ask you something</h1>
+      <h2>Can I?</h2>
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2" style="display:none;">
+      <h2>GOOD MY CUTIEPIE 😍</h2>
+      <p>Now comes the most important question... are you ready?</p>
+      <button id="readyBtn">Yes</button>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="step3" style="display:none;">
+      <div id="typing"></div>
+    </div>
+
+    <!-- Step 4 -->
+    <div id="step4" style="display:none;">
+      <h2>Choose your answer:</h2>
+      <button class="optionBtn">A. Yes</button>
+      <button class="optionBtn">B. A big YES</button>
+      <button class="optionBtn">C. A very big YES</button>
+      <button class="optionBtn">D. All of the above 💖</button>
+    </div>
+
+    <!-- Popup Surprise -->
+    <div id="popup">
+      <h2>This is for you 💐</h2>
+      <p>I Love You ❤️</p>
+      <p>Urdu: میں تم سے محبت کرتا ہوں</p>
+      <p>Bengali: আমি তোমাকে ভালোবাসি</p>
+      <p>Hindi: मैं तुमसे प्यार करता हूँ</p>
+      <p>Spanish: Te amo</p>
+      <button id="letterBtn">A Letter For You</button>
+      <div id="letter">[Write your personal letter here 💌]</div>
+    </div>
+  </div>
+
+  <!-- Background music -->
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const step4 = document.getElementById('step4');
+    const typingDiv = document.getElementById('typing');
+    const popup = document.getElementById('popup');
+    const letterBtn = document.getElementById('letterBtn');
+    const letter = document.getElementById('letter');
+
+    // Rose petal rain function
+    function petalRain() {
+      for (let i = 0; i < 15; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.style.left = Math.random() * window.innerWidth + 'px';
+        petal.style.background = ['pink','red','lightcoral'][Math.floor(Math.random()*3)];
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 5000);
+      }
+    }
+
+    // Step 1 logic: enlarge Yes until clicked
+    let yesSize = 1;
+    noBtn.addEventListener('click', () => {
+      yesSize += 0.5;
+      yesBtn.style.transform = `scale(${yesSize})`;
+    });
+    yesBtn.addEventListener('click', () => {
+      step1.style.display = 'none';
+      step2.style.display = 'block';
+      petalRain();
+    });
+
+    // Step 2 logic
+    document.getElementById('readyBtn').addEventListener('click', () => {
+      step2.style.display = 'none';
+      step3.style.display = 'block';
+      typeText("Will you be my Valentine?");
+      petalRain();
+    });
+
+    // Typing animation
+    function typeText(text) {
+      let i = 0;
+      const interval = setInterval(() => {
+        typingDiv.innerHTML = text.substring(0, i+1);
+        i++;
+        if (i === text.length) {
+          clearInterval(interval);
+          step4.style.display = 'block';
+        }
+      }, 100);
+    }
+
+    // Step 4 logic
+    document.querySelectorAll('.optionBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        step3.style.display = 'none';
+        step4.style.display = 'none';
+        popup.style.display = 'block';
+        petalRain();
+      });
+    });
+
+    // Letter button
+    letterBtn.addEventListener('click', () => {
+      letter.style.display = 'block';
+      petalRain();
+    });
+  </script>
+</body>
+</html>
